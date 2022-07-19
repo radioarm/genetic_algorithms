@@ -147,7 +147,7 @@ class BinaryVectorRanker(AbstractChromosomeRanker):
 
 
 class ContinuousFunctionRanker(AbstractChromosomeRanker):
-    def score(self, chromosome: ContinuousChromosome):
+    def score(self, chromosome: ContinuousChromosome) -> float:
         return chromosome.content[0]**2.0 + chromosome.content[1]**2.0
 
 
@@ -155,7 +155,7 @@ def get_random_binary_chromosome(
     chromosome_length: int,
     mutation_rate: float,
     bounds: list | None = None
-) -> list[BinaryChromosome]:
+) -> BinaryChromosome:
     return BinaryChromosome(randint(0, 2, chromosome_length).tolist(), mutation_rate)
 
 
@@ -163,11 +163,11 @@ def get_random_continuous_chromosome(
     chromosome_length: int,
     mutation_rate: float,
     bounds: list | None = None
-) -> list[BinaryChromosome]:
+) -> ContinuousChromosome:
     return ContinuousChromosome(randint(0, 2, chromosome_length*len(bounds)).tolist(), mutation_rate, bounds)
 
 
-@dataclasses.dataclass(slots=True)
+@dataclasses.dataclass
 class GeneticAlgorithm:
     chromosome_ranker: AbstractChromosomeRanker
     chromosome_length: int
@@ -250,8 +250,8 @@ if __name__ == "__main__":
     crossover_rate = 0.9
 
     # mutation_rate
-    # mutation_rate = 1.0 / float(chromosome_length)
-    mutation_rate = 1.0 / (float(chromosome_length) * len(bounds))
+    mutation_rate = 1.0 / float(chromosome_length)
+    # mutation_rate = 1.0 / (float(chromosome_length) * len(bounds))
 
     ranker = ContinuousFunctionRanker()
     # ranker = BinaryVectorRanker()
